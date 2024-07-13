@@ -1,6 +1,7 @@
 const express = require('express');
-   const mongoose = require('mongoose');
-   const cors = require('cors');
+const mongoose = require('mongoose');
+const cors = require('cors');
+
 
    const app = express();
    const PORT = process.env.PORT || 5000;
@@ -11,6 +12,8 @@ const express = require('express');
    mongoose.connect('mongodb://localhost:27017/', { useNewUrlParser: true, useUnifiedTopology: true })
      .then(() => console.log('MongoDB connected'))
      .catch(err => console.log(err));
+
+    
 
      app.post("/sing-up", (req, res) => {
       const {email, password} = req.body;
@@ -29,22 +32,18 @@ const express = require('express');
   })
   
   app.post("/register", (req, res) => {
-      EmployeeModel.create(req.body)
+      sign_up_model.create(req.body)
       .then(employees => res.json(employees))
       .catch(err => res.json(err))
   })
   
-  
-
-     
-
-   app.get('/', (req, res) => {
+  app.get('/', (req, res) => {
      res.send('Hello World');
    });
 
-   const userRoutes = require('./routes/users');
+//    const userRoutes = require('./routes/users');
 
-   app.use('/api', userRoutes);
+//    app.use('/api', userRoutes);
    
 
 
