@@ -8,7 +8,7 @@ const express = require('express');
    app.use(cors());
    app.use(express.json());
 
-   mongoose.connect('mongodb://localhost:27017/ngo', { useNewUrlParser: true, useUnifiedTopology: true })
+   mongoose.connect('mongodb://localhost:27017/', { useNewUrlParser: true, useUnifiedTopology: true })
      .then(() => console.log('MongoDB connected'))
      .catch(err => console.log(err));
 
