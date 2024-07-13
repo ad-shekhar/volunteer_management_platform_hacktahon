@@ -1,11 +1,19 @@
 const mongoose = require('mongoose');
 
 const VolunteerSchema = new mongoose.Schema({
-    username: { type: String, required: true, unique: true },
+    username: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true }
 });
 
-const VolunteerModel = mongoose.model('Volunteer', VolunteerSchema);
+const OrganizationSchema = new mongoose.Schema({
+    username: { type: String, required: true },
+    organizationName: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true }
+});
 
-module.exports = VolunteerModel;
+const Volunteer = mongoose.model("Volunteer", VolunteerSchema);
+const Organization = mongoose.model("Organization", OrganizationSchema);
+
+module.exports = { Volunteer, Organization };

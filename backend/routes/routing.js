@@ -1,10 +1,11 @@
 const express = require('express');
-const { registerVolunteer, loginVolunteer, getVolunteers } = require('../controllers/volunteerController');
+const { registerVolunteer, registerOrganization, loginUser, getVolunteers } = require('../controllers/volunteerController');
 
 const router = express.Router();
 
-router.post('/register', registerVolunteer);
-router.post('/login', loginVolunteer);
-router.get('/', getVolunteers);
+router.post('/register/volunteer', registerVolunteer);
+router.post('/register/organization', registerOrganization);
+router.post('/login', loginUser);
+router.get('/volunteers', getVolunteers);
 
 module.exports = router;

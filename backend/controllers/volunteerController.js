@@ -1,7 +1,6 @@
-const Volunteer = require('../model/sing_up_model');
+const { Volunteer, Organization } = require('../model/sing_up_model');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
 
 const registerVolunteer = async (req, res) => {
     const { username, email, password } = req.body;
@@ -24,19 +23,42 @@ const registerVolunteer = async (req, res) => {
     }
 };
 
-const loginVolunteer = async (req, res) => {
-    const { email, password } = req.body;
+const registerOrganization = async (req, res) => {
+    const { username, organizationName, email, password } = req.body;
 
     try {
-        const volunteer = await Volunteer.findOne({ email });
-        if (!volunteer) return res.status(404).json({ message: 'Volunteer not found' });
+        const existingOrganization = await Organization.findOne({ email });
+        if (existingOrganization) return res.status(400).json({ message: 'Organization already exists' });
 
-        const isPasswordCorrect = await bcrypt.compare(password, volunteer.password);
+        const hashedPassword = await bcrypt.hash(password, 12);
+
+        const newOrganization = await Organization.create({
+            username,
+            organizationName,
+            email,
+            password: hashedPassword
+        });
+
+        res.status(201).json(newOrganization);
+    } catch (error) {
+        res.status(500).json({ message: 'Something went wrong' });
+    }
+};
+
+const loginUser = async (req, res) => {
+    const { email, password, userType } = req.body;
+
+    try {
+        const User = userType === 'volunteer' ? Volunteer : Organization;
+        const user = await User.findOne({ email });
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        const isPasswordCorrect = await bcrypt.compare(password, user.password);
         if (!isPasswordCorrect) return res.status(400).json({ message: 'Invalid credentials' });
 
-        const token = jwt.sign({ email: volunteer.email, id: volunteer._id, username: volunteer.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ email: user.email, id: user._id, userType }, 'test', { expiresIn: '1h' });
 
-        res.status(200).json({ result: volunteer, token });
+        res.status(200).json({ result: user, token });
     } catch (error) {
         res.status(500).json({ message: 'Something went wrong' });
     }
@@ -51,4 +73,4 @@ const getVolunteers = async (req, res) => {
     }
 };
 
-module.exports = { registerVolunteer, loginVolunteer, getVolunteers };
+module.exports = { registerVolunteer, registerOrganization, loginUser, getVolunteers };
