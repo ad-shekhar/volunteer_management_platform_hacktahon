@@ -1,8 +1,11 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { Navbar } from "@/widgets/layout";
 import routes from "@/routes";
+import Chatroom from "./Chatroom";
 import { SignIn, SignUp } from "./pages";
-
+import DashboardHome from "./components/DashBoard";
+import DashboardLayout from "./components/DashBoardlayout";
+import Profile from "./components/Profile";
 
 function App() {
   const { pathname } = useLocation();
@@ -22,6 +25,12 @@ function App() {
         )}
         <Route path='/signin' element={<SignIn></SignIn>}></Route>
         <Route path='/signup' element={<SignUp></SignUp>}></Route>
+          <Route path='/chatroom' element={<Chatroom></Chatroom>}></Route>
+        
+        <Route path="/dashboard" element={<DashboardLayout />}>
+          <Route path="home" element={<DashboardHome />} />
+          <Route path="profile" element={<Profile />} />
+        </Route>
         <Route path="*" element={<Navigate to="/home" replace />} />
       </Routes>
     </>
