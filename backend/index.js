@@ -16,6 +16,12 @@ const express = require('express');
      res.send('Hello World');
    });
 
+   const userRoutes = require('./routes/users');
+
+   app.use('/api', userRoutes);
+   
+
+
    app.listen(PORT, () => {
      console.log(`Server running on port ${PORT}`);
    });
