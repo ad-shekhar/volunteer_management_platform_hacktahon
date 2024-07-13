@@ -8,13 +8,19 @@ const express = require('express');
    app.use(cors());
    app.use(express.json());
 
-   mongoose.connect('mongodb://localhost:27017/ngo', { useNewUrlParser: true, useUnifiedTopology: true })
+   mongoose.connect('mongodb://localhost:27017/', { useNewUrlParser: true, useUnifiedTopology: true })
      .then(() => console.log('MongoDB connected'))
      .catch(err => console.log(err));
 
    app.get('/', (req, res) => {
      res.send('Hello World');
    });
+
+   const userRoutes = require('./routes/users');
+
+   app.use('/api', userRoutes);
+   
+
 
    app.listen(PORT, () => {
      console.log(`Server running on port ${PORT}`);
